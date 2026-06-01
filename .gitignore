@@ -1,0 +1,12 @@
+.mvn/wrapper/maven-wrapper.jar
+.env
+target/
+pending-emails/
+*.class
+*.log
+.idea/
+*.iml
+.settings/
+.classpath
+.project
+.env
