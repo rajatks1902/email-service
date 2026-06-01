@@ -18,7 +18,4 @@ COPY --from=build /build/target/quarkus-app/quarkus/ /app/quarkus/
 
 EXPOSE 8080
 
-ENTRYPOINT ["java",
-            "-Dquarkus.http.host=0.0.0.0",
-            "-jar",
-            "/app/quarkus-run.jar"]
+ENTRYPOINT ["java","-Dquarkus.http.host=0.0.0.0","-jar","/app/quarkus-run.jar"]
