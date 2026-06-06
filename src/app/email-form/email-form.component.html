@@ -1,0 +1,222 @@
+<div class="container py-4" style="max-width: 720px;">
+
+  <!-- ── Header ──────────────────────────────────────────────────────────── -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h1 class="h3 mb-0 fw-bold">
+        <i class="bi bi-envelope-fill text-primary me-2"></i>Email Service
+      </h1>
+      <small class="text-muted">Send emails using default or custom templates</small>
+    </div>
+    <button class="btn btn-outline-secondary btn-sm" (click)="toggleSettings()">
+      <i class="bi bi-gear-fill me-1"></i>Settings
+    </button>
+  </div>
+
+  <!-- ── Settings panel ──────────────────────────────────────────────────── -->
+  <div class="card card-shadow mb-4 border-secondary" *ngIf="showSettings">
+    <div class="card-header bg-secondary text-white fw-semibold">
+      <i class="bi bi-plug-fill me-1"></i>Backend Connection
+    </div>
+    <div class="card-body" [formGroup]="settingsForm">
+      <label class="form-label">Backend API URL</label>
+      <div class="input-group">
+        <input
+          type="url"
+          class="form-control font-monospace"
+          formControlName="apiUrl"
+          placeholder="http://localhost:8080"
+        />
+        <button class="btn btn-outline-primary" type="button" (click)="testConnection()">
+          <i class="bi bi-wifi me-1"></i>Test
+        </button>
+      </div>
+      <div class="mt-2">
+        <span *ngIf="healthStatus === 'ok'" class="badge bg-success">
+          <i class="bi bi-check-circle me-1"></i>Connected
+        </span>
+        <span *ngIf="healthStatus === 'error'" class="badge bg-danger">
+          <i class="bi bi-x-circle me-1"></i>Cannot reach server
+        </span>
+      </div>
+      <div class="mt-3 d-flex gap-2">
+        <button class="btn btn-primary btn-sm" (click)="saveSettings()" [disabled]="settingsForm.invalid">
+          Save
+        </button>
+        <button class="btn btn-light btn-sm" (click)="toggleSettings()">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Response banner ─────────────────────────────────────────────────── -->
+  <div *ngIf="response" class="alert" [class.alert-success]="response.success" [class.alert-danger]="!response.success" role="alert">
+    <i class="bi me-2" [class.bi-check-circle-fill]="response.success" [class.bi-x-circle-fill]="!response.success"></i>
+    {{ response.message }}
+    <button type="button" class="btn-close float-end" (click)="response = null"></button>
+  </div>
+  <div *ngIf="error" class="alert alert-danger" role="alert">
+    <i class="bi bi-exclamation-triangle-fill me-2"></i>{{ error }}
+    <button type="button" class="btn-close float-end" (click)="error = null"></button>
+  </div>
+
+  <!-- ── Main form ───────────────────────────────────────────────────────── -->
+  <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+    <div class="card card-shadow">
+      <div class="card-body p-4">
+
+        <!-- To -->
+        <div class="mb-3">
+          <label for="to" class="form-label fw-semibold">
+            To <span class="text-danger">*</span>
+          </label>
+          <input
+            id="to"
+            type="email"
+            class="form-control"
+            [class.is-invalid]="fieldInvalid('to')"
+            formControlName="to"
+            placeholder="recipient@example.com"
+          />
+          <div class="invalid-feedback">Please enter a valid email address.</div>
+        </div>
+
+        <!-- Subject -->
+        <div class="mb-3">
+          <label for="subject" class="form-label fw-semibold">
+            Subject
+            <span class="text-muted fw-normal ms-1 small">(optional — uses default-subject.txt)</span>
+          </label>
+          <input
+            id="subject"
+            type="text"
+            class="form-control"
+            formControlName="subject"
+            placeholder="Leave blank to use the default subject template"
+          />
+        </div>
+
+        <!-- Body -->
+        <div class="mb-3">
+          <label for="body" class="form-label fw-semibold">
+            Body
+            <span class="text-muted fw-normal ms-1 small">(optional — uses default-body.html, HTML supported)</span>
+          </label>
+          <textarea
+            id="body"
+            class="form-control font-monospace"
+            rows="6"
+            formControlName="body"
+            [placeholder]="bodyPlaceholder"
+          ></textarea>
+        </div>
+
+        <!-- Attachment -->
+        <div class="mb-4">
+          <label for="attachment" class="form-label fw-semibold">
+            Attachment
+            <span class="text-muted fw-normal ms-1 small">(optional — uses default-attachment.txt)</span>
+          </label>
+          <div class="d-flex align-items-center gap-2">
+            <input
+              id="attachment"
+              type="file"
+              class="form-control"
+              (change)="onFileChange($event)"
+            />
+            <button
+              *ngIf="selectedFile"
+              type="button"
+              class="btn btn-outline-danger btn-sm"
+              (click)="clearFile()"
+              title="Remove file"
+            >
+              <i class="bi bi-x-lg"></i>
+            </button>
+          </div>
+          <div *ngIf="selectedFile" class="mt-1 text-muted small">
+            <i class="bi bi-paperclip me-1"></i>{{ selectedFile.name }}
+            ({{ (selectedFile.size / 1024).toFixed(1) }} KB)
+          </div>
+        </div>
+
+        <hr class="my-3" />
+
+        <!-- Replacements -->
+        <div class="mb-3">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <div>
+              <span class="fw-semibold">Template Replacements</span>
+              <span class="text-muted fw-normal ms-1 small">
+                (optional — substitutes <code>{{'{{'}}key{{'}}'}}</code> in subject &amp; body)
+              </span>
+            </div>
+            <button type="button" class="btn btn-outline-primary btn-sm" (click)="addReplacement()">
+              <i class="bi bi-plus-circle me-1"></i>Add
+            </button>
+          </div>
+
+          <div *ngIf="replacements.length === 0" class="text-muted small fst-italic">
+            No replacements added. Placeholders in the templates will remain unchanged.
+          </div>
+
+          <div formArrayName="replacements">
+            <div
+              *ngFor="let _ of replacements.controls; let i = index"
+              [formGroupName]="i"
+              class="replacement-row mb-2"
+            >
+              <input
+                type="text"
+                class="form-control form-control-sm font-monospace"
+                [class.is-invalid]="replacementCtrl(i,'key').invalid && replacementCtrl(i,'key').touched"
+                formControlName="key"
+                placeholder="key (e.g. name)"
+              />
+              <input
+                type="text"
+                class="form-control form-control-sm"
+                formControlName="value"
+                placeholder="replacement value"
+              />
+              <button
+                type="button"
+                class="btn btn-outline-danger btn-sm"
+                (click)="removeReplacement(i)"
+                title="Remove"
+              >
+                <i class="bi bi-trash"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Footer actions -->
+      <div class="card-footer bg-transparent d-flex justify-content-between align-items-center px-4 py-3">
+        <button type="button" class="btn btn-light" (click)="reset()">
+          <i class="bi bi-arrow-counterclockwise me-1"></i>Reset
+        </button>
+        <button
+          type="submit"
+          class="btn btn-primary px-4"
+          [disabled]="isLoading"
+        >
+          <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2" role="status"></span>
+          <i *ngIf="!isLoading" class="bi bi-send-fill me-1"></i>
+          {{ isLoading ? 'Sending…' : 'Send Email' }}
+        </button>
+      </div>
+    </div>
+  </form>
+
+  <!-- ── Info box ─────────────────────────────────────────────────────────── -->
+  <div class="card border-0 bg-light mt-4 small text-muted">
+    <div class="card-body py-2 px-3">
+      <strong>How it works:</strong>
+      Fields left blank fall back to the defaults loaded from the backend repository
+      (<code>default-subject.txt</code>, <code>default-body.html</code>, <code>default-attachment.txt</code>).
+      Use <code>{{'{{'}}key{{'}}'}}</code> placeholders in any template and provide matching replacements above.
+    </div>
+  </div>
+</div>

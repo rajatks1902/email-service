@@ -1,0 +1,10 @@
+.replacement-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: 8px;
+  align-items: start;
+}
+
+textarea.font-monospace {
+  font-size: 0.875rem;
+}

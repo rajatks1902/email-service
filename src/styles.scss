@@ -1,0 +1,24 @@
+/* Global styles */
+body {
+  min-height: 100vh;
+}
+
+.card-shadow {
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+}
+
+.replacement-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: 8px;
+  align-items: center;
+}
+
+.badge-key {
+  font-family: monospace;
+  background: #e9ecef;
+  color: #495057;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.85em;
+}
