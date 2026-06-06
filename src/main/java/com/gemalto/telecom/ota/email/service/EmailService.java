@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -65,8 +66,8 @@ public class EmailService {
     public boolean send(EmailForm form) {
         Map<String, String> replacements = parseReplacements(form.replacements);
         System.out.println(replacements);
-        String subject = resolve(form.subject, defaultSubject, replacements);
-        String body    = resolve(form.body,    defaultBody,    replacements);
+        String subject = resolveTitle(form.subject, defaultSubject, replacements);
+        String body    = resolveBody(form.body,    defaultBody,    replacements);
 
         byte[] attachBytes = (form.attachment != null && form.attachment.length > 0)
                 ? form.attachment : defaultAttachmentBytes;
@@ -140,9 +141,36 @@ public class EmailService {
         mailer.send(mail);
     }
 
-    private String resolve(String userValue, String defaultValue, Map<String, String> replacements) {
-        String template = (userValue != null && !userValue.isBlank()) ? userValue : defaultValue;
-        return templateProcessor.process(template, replacements);
+    private String resolveTitle(
+            String userValue,
+            String defaultValue,
+            Map<String, String> replacements) {
+
+        String template =
+                (userValue != null && !userValue.isBlank())
+                        ? userValue
+                        : defaultValue;
+
+        Map<String, String> updatedReplacements  = populateSubject(replacements);
+
+
+        return templateProcessor.process(template, updatedReplacements);
+    }
+
+    private String resolveBody(
+            String userValue,
+            String defaultValue,
+            Map<String, String> replacements) {
+
+        String template =
+                (userValue != null && !userValue.isBlank())
+                        ? userValue
+                        : defaultValue;
+
+        Map<String, String> updatedReplacements =
+                templateProcessor.populateJobApplicationSection(replacements);
+
+        return templateProcessor.process(template, updatedReplacements);
     }
 
     private Map<String, String> parseReplacements(String json) {
@@ -173,5 +201,38 @@ public class EmailService {
             LOG.warnf("Failed to load %s: %s", resourcePath, e.getMessage());
             return new byte[0];
         }
+    }
+
+    private Map<String, String> populateSubject(Map<String, String> replacements) {
+
+        Map<String, String> updatedReplacements = new HashMap<>(replacements);
+
+        String jobTitle = replacements.get("jobTitle");
+        String jobId = replacements.get("jobId");
+
+        String subject;
+
+        boolean hasJobTitle = jobTitle != null && !jobTitle.isBlank();
+        boolean hasJobId = jobId != null && !jobId.isBlank();
+
+        if (hasJobTitle && hasJobId) {
+            subject = String.format(
+                    "Application for %s (Job ID: %s) – Rajat Singh",
+                    jobTitle,
+                    jobId);
+        } else if (hasJobTitle) {
+            subject = String.format(
+                    "Application for %s – Rajat Singh",
+                    jobTitle);
+        } else if (hasJobId) {
+            subject = String.format(
+                    "Application for Job ID %s – Rajat Singh",
+                    jobId);
+        } else {
+            subject = "Backend Engineer Application – Rajat Singh | 3+ Years Experience";
+        }
+
+        updatedReplacements.put("emailSubject", subject);
+        return updatedReplacements;
     }
 }

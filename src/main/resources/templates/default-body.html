@@ -1,102 +1,144 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      color: #333;
-      line-height: 1.6;
-      max-width: 700px;
-      margin: 40px auto;
-      padding: 20px;
-    }
+    <meta charset="UTF-8" />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            color: #333333;
+            line-height: 1.6;
+            max-width: 700px;
+            margin: 40px auto;
+            padding: 20px;
+        }
 
-    .container {
-      border: 1px solid #e0e0e0;
-      border-radius: 8px;
-      padding: 24px;
-    }
+        .container {
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 24px;
+        }
 
-    .header {
-      font-size: 22px;
-      font-weight: bold;
-      color: #0057b8;
-      margin-bottom: 20px;
-    }
+        .header {
+            font-size: 22px;
+            font-weight: bold;
+            color: #0057b8;
+            margin-bottom: 20px;
+        }
 
-    ul {
-      padding-left: 20px;
-    }
+        p {
+            margin: 0 0 16px 0;
+        }
 
-    li {
-      margin-bottom: 10px;
-    }
+        ul {
+    padding-left: 20px;
+    margin: 5px 0;
+}
 
-    .footer {
-      margin-top: 30px;
-    }
-  </style>
+li {
+    margin: 0;
+    padding: 0;
+    line-height: 1.4;
+}
+
+        .footer {
+            margin-top: 30px;
+        }
+
+        a {
+            color: #0057b8;
+            text-decoration: none;
+        }
+
+        .highlight-title {
+            font-weight: bold;
+            margin-top: 20px;
+        }
+    </style>
 </head>
 <body>
+
 <div class="container">
-  <div class="header">
-    Application for Backend Software Engineering Opportunities
-  </div>
 
-  <p>Hello {{name}},</p>
+    <div class="header">
+        Backend Software Engineer Application
+    </div>
 
-  <p>
-    I am writing to express my interest in backend software engineering opportunities at your organization.
-    Please find attached my resume for your consideration.
-  </p>
+    <p>Hello {{name}},</p>
 
-  <p>
-    I am currently working as a Software Engineer - II at Thales DIS with over 3 years of experience in
-    Java, Spring Boot, Cassandra, and Microservices. I have a proven track record of building scalable
-    backend systems, automating SIM services for 10M+ users, and optimizing CI/CD pipelines for faster deployments.
-  </p>
-
-  <p><strong>Some highlights of my profile include:</strong></p>
-
-  <ul>
-    <li>
-      Strong expertise in Cassandra, SQL, REST APIs, Docker, Kubernetes, and Git CI/CD.
-    </li>
-    <li>
-      Winner of Thales COTA Hackathon for automation in microservices.
-    </li>
-    <li>
-      Competitive programmer with 1500+ DSA problems solved
-      (Top 13% on LeetCode, Codeforces Pupil, 6★ HackerRank).
-    </li>
-    <li>
-      Experience in building secure, production-grade systems with JWT,
-      resilient retries, and Cassandra-based models.
-    </li>
-  </ul>
-
-  <p>
-    I am passionate about clean code, backend architecture, and designing scalable systems,
-    and I am eager to bring this expertise to your team.
-  </p>
-
-  <p>
-    I would be grateful for the opportunity to discuss how my skills and experiences align
-    with the needs of your organization.
-  </p>
-
-  <p>
-    Looking forward to your response.
-  </p>
-
-  <div class="footer">
     <p>
-      Best regards,<br>
-      <strong>Rajat Kumar Singh</strong><br>
-      📞 +91 9621941977
+        {{applicationIntro}}
+        I am a Backend SDE II at Thales DIS with 3+ years of experience building scalable backend systems and microservices that serve millions of users.
+        I have attached my resume for your review.
     </p>
-  </div>
+
+    <p class="highlight-title">
+        What I bring to the table:
+    </p>
+
+    <ul>
+        <li>
+            <strong>Backend Development:</strong>
+            Java, Spring Boot, REST APIs, Microservices, JPA/JDBC, Quarkus.
+        </li>
+
+        <li>
+            <strong>Data at Scale:</strong>
+            Cassandra, SQL, and Apache Spark with experience processing 10M+ records for analytics and large-scale systems.
+        </li>
+
+        <li>
+            <strong>DevOps & Cloud:</strong>
+            Docker, Kubernetes, and Git CI/CD, reducing deployment times by 35%.
+        </li>
+
+        <li>
+            <strong>Distributed Systems:</strong>
+            Kafka, JWT Authentication, Circuit Breakers, Lease Models, and Event-Driven Architecture.
+        </li>
+
+        <li>
+            <strong>Automation:</strong>
+            Eliminated 80–100% manual effort across multiple production workflows.
+        </li>
+
+        <li>
+            <strong>Recognition:</strong>
+            Winner of the Thales COTA Hackathon for microservices automation.
+        </li>
+
+        <li>
+            <strong>Problem Solving:</strong>
+            Solved 1,700+ DSA problems with strong competitive programming experience.
+        </li>
+    </ul>
+
+    <p>
+        I enjoy building reliable distributed systems, solving complex backend challenges,
+        and taking ownership of products end-to-end. I would welcome the opportunity to
+        discuss how my experience can contribute to your engineering team.
+    </p>
+
+    <p>
+        Thank you for your time and consideration. I look forward to hearing from you.
+    </p>
+
+    <div class="footer">
+        <p>
+            Best regards,<br><br>
+
+            <strong>Rajat Kumar Singh</strong><br>
+            Software Engineer II | Thales DIS<br>
+
+            📞 <a href="tel:+919621941977">+91 9621941977</a><br>
+            📧 <a href="mailto:rajatk.singh1902@gmail.com">rajatk.singh1902@gmail.com</a><br>
+            🔗 <a href="https://www.linkedin.com/in/rajat-kumar-singh-a816791a5/" target="_blank">
+            linkedin.com/in/rajat-kumar-singh
+        </a>
+        </p>
+    </div>
+
 </div>
+
 </body>
 </html>
