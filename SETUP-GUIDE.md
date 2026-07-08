@@ -103,7 +103,7 @@ mvn quarkus:dev
 cd /c/1OTA/email-service   # or wherever the project lives
 
 # Load .env and start in dev mode
-export $(grep -v '^#' .env | xargs)
+export $(tr -d '\r' < .env | grep -v '^#' | xargs)
 mvn quarkus:dev
 ```
 

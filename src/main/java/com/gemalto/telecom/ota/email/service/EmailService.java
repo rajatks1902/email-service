@@ -65,7 +65,6 @@ public class EmailService {
      */
     public boolean send(EmailForm form) {
         Map<String, String> replacements = parseReplacements(form.replacements);
-        System.out.println(replacements);
         String subject = resolveTitle(form.subject, defaultSubject, replacements);
         String body    = resolveBody(form.body,    defaultBody,    replacements);
 
@@ -81,12 +80,6 @@ public class EmailService {
             ));
             return false;
         }
-        LOG.infof("form.attachment length=%s",
-                form.attachment == null ? "null" : form.attachment.length);
-
-        LOG.infof("defaultAttachmentBytes length=%d",
-                defaultAttachmentBytes.length);
-
         doSend(form.to, subject, body, attachBytes, attachName);
         return true;
     }
@@ -126,11 +119,6 @@ public class EmailService {
         Mail mail = Mail.withHtml(to, subject, body);
 
         if (attachBytes != null && attachBytes.length > 0) {
-
-            LOG.infof("Attachment name=%s", attachName);
-            LOG.infof("PDF size=%d bytes", attachBytes.length);
-            LOG.infof("PDF header=%s", new String(attachBytes, 0, 5));
-
             mail.addAttachment(
                     attachName,
                     attachBytes,
