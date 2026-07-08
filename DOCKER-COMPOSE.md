@@ -13,7 +13,8 @@ http://localhost:4200
 ```
 
 The frontend proxies `/api/*` to the backend container. The backend is also
-published directly at `http://localhost:8080` for Swagger and direct API checks.
+published directly at `http://localhost:8082` by default for Swagger and direct
+API checks. Set `HOST_BACKEND_PORT=8080` if local port `8080` is available.
 
 SMTP variables are read from the shell or `.env` file:
 
