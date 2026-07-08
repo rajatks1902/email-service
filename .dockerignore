@@ -1,0 +1,8 @@
+target/
+.git/
+.idea/
+email-client/
+pending-emails/
+.env
+*.log
+*.class

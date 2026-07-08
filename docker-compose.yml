@@ -1,0 +1,30 @@
+services:
+  email-service:
+    build:
+      context: .
+    image: rajatks1902/email-service:local
+    container_name: email-service
+    environment:
+      MAIL_FROM: ${MAIL_FROM:-noreply@gmail.com}
+      MAIL_HOST: ${MAIL_HOST:-smtp.gmail.com}
+      MAIL_PORT: ${MAIL_PORT:-587}
+      MAIL_USERNAME: ${MAIL_USERNAME:-}
+      MAIL_PASSWORD: ${MAIL_PASSWORD:-}
+      PORT: 8080
+    ports:
+      - "8080:8080"
+    volumes:
+      - pending-emails:/app/pending-emails
+
+  email-client:
+    build:
+      context: ./email-client
+    image: rajatks1902/email-client:local
+    container_name: email-client
+    depends_on:
+      - email-service
+    ports:
+      - "4200:80"
+
+volumes:
+  pending-emails:

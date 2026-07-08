@@ -21,7 +21,7 @@ class EmailResourceTest {
     @Test
     void sendEndpointReturnsBadRequestWhenToIsMissing() {
         RestAssured.given()
-                .contentType("multipart/form-data")
+                .multiPart("subject", "Test subject")
                 .when().post("/api/email/send")
                 .then()
                 .statusCode(400)
