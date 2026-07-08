@@ -10,3 +10,4 @@ pending-emails/
 .classpath
 .project
 .env
+/email-client/
